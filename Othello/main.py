@@ -22,3 +22,4 @@ def mainLoop() :
 	game.affiche(jeu)
 	print("gagnant :", game.getGagnant(jeu))
 
+mainLoop()
