@@ -9,18 +9,18 @@ def nouveauPlateau():
             [4, 4, 4, 4, 4, 4]]
 
 
-def getparcoursJoueur(joueur):
-    """Int->List[Tuple(Int,Int)]
-    Retourne la liste des paires d'indices de cases dans l'ordre du début de la rangée du joueur dont c'est le tour
-    """
-    IDCJ1 = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5)]
-    IDCJ2 = [(1,5), (1,4), (1,3), (1,2), (1,1), (1,0)]
-    
-    if joueur == 1:
-        return IDCJ1 + IDCJ2
-    if joueur == 2:
-        return IDCJ2 + IDCJ1
-
+# def getparcoursJoueur(joueur):
+#     """Int->List[Tuple(Int,Int)]
+#     Retourne la liste des paires d'indices de cases dans l'ordre du début de la rangée du joueur dont c'est le tour
+#     """
+#     IDCJ1 = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5)]
+#     IDCJ2 = [(1,5), (1,4), (1,3), (1,2), (1,1), (1,0)]
+#     
+#     if joueur == 1:
+#         return IDCJ1 + IDCJ2
+#     if joueur == 2:
+#         return IDCJ2 + IDCJ1
+# 
 def getGrainesJoueur(plateau, joueur):
     """plateau*Int -> Int
         Retourne le nombre de graine du coté du joueur @joueur
@@ -29,80 +29,80 @@ def getGrainesJoueur(plateau, joueur):
     nb_graines = 0
     for case in parcours[:6]:
         nb_graines += plt[case[0]][case[1]]
-
+ 
     return nb_graines
-        
-
-def startFromCase(parcours, case):
-    """List[Tuple(Int,Int)] * Tuple(Int,Int)->List[Tuple(Int,Int)]
-    Retourne la liste des cases où déposer les graines dans l'ordre de dépose"""
-    idx_case = parcours.index(case)
-
-    return [ parcours[(12-idx_case+1+i)%11] for i in range(11) ]
-
-def coupValide(jeu,coup):
-    """jeu*coup -> bool
-        Retourne vrai si le coup est valide dans jeu
-    """
-    val          = False
-    plt          = jeu[0]
-    parcours     = getparcoursJoueur(jeu[1])
-    
-    #déjà, interdiction de s'affamer:
-    if getGrainesJoueur(plt, jeu[1]) == plt[coup[0], coup[1]] and coup == parcours[5]:
-        val = False
-
-    dispersion   = startFromCase(parcours, coup)
-        
-    #on disperse dans les cases
-    graines_main = plt[coup[0], coup[1]]
-    for i in range(graines_main):
-        case = dispersion[i%11]
-        plt[case[0]][case[1]] += 1
-        graines_main -= 1
-
-    #on capture les graines adverses
-    for case in parcours[6:].copy().reverse():
-        graine_dans_case = plt[case[0]][case[1]]
-        if ((2 == graine_dans_case or graine_dans_case == 3) and #condition de prise
-        getGrainesJoueur( plt, 1+jeu[1]%2 ) > graine_dans_case): #on vérif que l'opposant ne sera pas affamé
-            
-            jeu[4][jeu[1]-1] += plt[case[0]][case[1]]
-            plt[case[0]][case[1]] = 0 #confiscation!!
-        else:
-            break #on s'arrete si les case de l'adversaire parcourues dans le sens horaire ne sont plus capturable
-
-    return val
-
-def joueCoup(jeu,coup):
-    """jeu*coup -> void
-        Joue un coup
-        Hypothese:le coup est valide
-        Met à jour le plateau
-    """
-    plt          = jeu[0]
-    graines_main = plt[coup[0], coup[1]]
-    parcours     = getparcoursJoueur(jeu[1])
-
-    dispersion   = startFromCase(parcours, coup)
-        
-    #on disperse dans les cases
-    graines_main = plt[coup[0], coup[1]]
-    for i in range(graines_main):
-        case = dispersion[i%11]
-        plt[case[0]][case[1]] += 1
-        graines_main -= 1
-
-    #on capture les graines adverses
-    for case in parcours[6:].copy().reverse():
-        graine_dans_case = plt[case[0]][case[1]]
-        if ((2 == graine_dans_case or graine_dans_case == 3) and #condition de prise
-        getGrainesJoueur( plt, 1+jeu[1]%2 ) > graine_dans_case): #on vérif que l'opposant ne sera pas affamé
-            
-            jeu[4][jeu[1]-1] += plt[case[0]][case[1]]
-            plt[case[0]][case[1]] = 0 #confiscation!!
-        else:
-            break #on s'arrete si les case de l'adversaire parcourues dans le sens horaire ne sont plus capturable
+         
+ 
+# def startFromCase(parcours, case):
+#     """List[Tuple(Int,Int)] * Tuple(Int,Int)->List[Tuple(Int,Int)]
+#     Retourne la liste des cases où déposer les graines dans l'ordre de dépose"""
+#     idx_case = parcours.index(case)
+# 
+#     return [ parcours[(12-idx_case+1+i)%11] for i in range(11) ]
+# 
+# def coupValide(jeu,coup):
+#     """jeu*coup -> bool
+#         Retourne vrai si le coup est valide dans jeu
+#     """
+#     val          = False
+#     plt          = jeu[0]
+#     parcours     = getparcoursJoueur(jeu[1])
+#     
+#     #déjà, interdiction de s'affamer:
+#     if getGrainesJoueur(plt, jeu[1]) == plt[coup[0], coup[1]] and coup == parcours[5]:
+#         val = False
+# 
+#     dispersion   = startFromCase(parcours, coup)
+#         
+#     #on disperse dans les cases
+#     graines_main = plt[coup[0], coup[1]]
+#     for i in range(graines_main):
+#         case = dispersion[i%11]
+#         plt[case[0]][case[1]] += 1
+#         graines_main -= 1
+# 
+#     #on capture les graines adverses
+#     for case in parcours[6:].copy().reverse():
+#         graine_dans_case = plt[case[0]][case[1]]
+#         if ((2 == graine_dans_case or graine_dans_case == 3) and #condition de prise
+#         getGrainesJoueur( plt, 1+jeu[1]%2 ) > graine_dans_case): #on vérif que l'opposant ne sera pas affamé
+#             
+#             jeu[4][jeu[1]-1] += plt[case[0]][case[1]]
+#             plt[case[0]][case[1]] = 0 #confiscation!!
+#         else:
+#             break #on s'arrete si les case de l'adversaire parcourues dans le sens horaire ne sont plus capturable
+# 
+#     return val
+# 
+# def joueCoup(jeu,coup):
+#     """jeu*coup -> void
+#         Joue un coup
+#         Hypothese:le coup est valide
+#         Met à jour le plateau
+#     """
+#     plt          = jeu[0]
+#     graines_main = plt[coup[0], coup[1]]
+#     parcours     = getparcoursJoueur(jeu[1])
+# 
+#     dispersion   = startFromCase(parcours, coup)
+#         
+#     #on disperse dans les cases
+#     graines_main = plt[coup[0], coup[1]]
+#     for i in range(graines_main):
+#         case = dispersion[i%11]
+#         plt[case[0]][case[1]] += 1
+#         graines_main -= 1
+# 
+#     #on capture les graines adverses
+#     for case in parcours[6:].copy().reverse():
+#         graine_dans_case = plt[case[0]][case[1]]
+#         if ((2 == graine_dans_case or graine_dans_case == 3) and #condition de prise
+#         getGrainesJoueur( plt, 1+jeu[1]%2 ) > graine_dans_case): #on vérif que l'opposant ne sera pas affamé
+#             
+#             jeu[4][jeu[1]-1] += plt[case[0]][case[1]]
+#             plt[case[0]][case[1]] = 0 #confiscation!!
+#         else:
+#             break #on s'arrete si les case de l'adversaire parcourues dans le sens horaire ne sont plus capturable
 
 def finJeu(jeu):
     """ jeu -> bool
@@ -116,6 +116,7 @@ def getGagnant(jeu):
     """jeu->nat
     Retourne le numero du joueur gagnant apres avoir finalise la partie. Retourne 0 si match nul
     """
+    plt = jeu[0]
     #on capture ses graines
     jeu[4][0] += getGrainesJoueur( plt, 1 )
     jeu[4][1] += getGrainesJoueur( plt, 2 )
@@ -132,7 +133,6 @@ def getGagnant(jeu):
 #AWELE
 
 import game  # @UnresolvedImport
-from builtins import None
 
 def nourrit(jeu, coup):
     j = game.getJoueur(jeu)
@@ -195,7 +195,6 @@ def mange():
 def joueCoup(jeu, coup):
     l, c = distribue(jeu, coup)
     j = game.getJoueur(jeu)
-    save = game.getCopieJeu(jeu)
     v = game.getCaseVal(jeu, l, c)
     pris = []
     

@@ -63,13 +63,8 @@ def getCoupsValides(jeu):
     if jeu[2]:
         return jeu[2]
 
-    #on teste tous les coup et on regarde si ils sont valides
-    cv = []
-    plt = getPlateau(jeu)
-    for i in range(len(plt)):
-        for j in range(len(plt[0])):
-            cv.append(game.coupValide(jeu, (i,j)))
-            
+    #on confie la tâche au jeu
+    cv = game.coupValides(jeu)  
     jeu[2] = cv
     return cv
 
@@ -141,7 +136,7 @@ def affiche(jeu):
             getCoupsJoues(jeu)[-1], getScores(jeu)) )
 
     #première ligne
-    lignes.append( lineBuilder([" "] + List(range(len_ligne)) ) )
+    lignes.append( lineBuilder([" "] + list(range(len_ligne)) ) )
 
     #toutes les lignes du tableau
     for i in range(len_ligne):
