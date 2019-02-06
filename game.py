@@ -58,7 +58,7 @@ def saisieCoup(jeu):
 def getCoupsValides(jeu):
     """ jeu  -> List[coup]
         Retourne la liste des coups valides dans le jeu passe en parametre
-        Si None, alors on met � jour la liste des coups valides
+        Si None, alors on met à jour la liste des coups valides
     """
     if jeu[2] is not None:
         return jeu[2]
@@ -81,9 +81,6 @@ def joueCoup(jeu,coup):
         Met tous les champs de jeu à jour (sauf coups valides qui est fixée à None)
     """
     game.joueCoup(jeu,coup)
-    getCoupsJoues(jeu).append(coup)
-    changeJoueur(jeu)
-    jeu[2] = None
 
 def initialiseJeu():
     """ void -> jeu

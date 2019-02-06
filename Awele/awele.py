@@ -184,29 +184,42 @@ def distribue(jeu, case):
     while v > 0:
         nc = nextCase(*nc)
         if not nc == case:
-            jeu[0][nc[0]][nc[1]]+1
+            jeu[0][nc[0]][nc[1]]+=1
             v -= 1
+    jeu[0][case[0]][case[1]] = v
     return nc
 
-def joueCoup(jeu, coup):
-    l, c = distribue(jeu, coup)
+def mange(jeu, case):
+    l,c = case
     j = game.getJoueur(jeu)
-    v = game.getCaseVal(jeu, l, c)
-    pris = []
+    adv = j % 2+ 1
     
-    while(l == (j % 2 + 1)) and (v == 2 or v == 3):
-        jeu[0][j][c] = 0
+    v = game.getCaseVal(jeu, l, c)
+    
+    pris = []
+    score = list(jeu[4])
+    
+    while(l == adv-1) and (v == 2 or v == 3):
+        jeu[0][l][c] = 0
         pris.append(v)
-        jeu[-1][j-1] += v
+        score[j-1] += v
         l, c = nextCase(l, c, horraire=True)
         v = game.getCaseVal(jeu, l, c)
-        
+
+    if advAffame(jeu): #on rend si ça affame l'adversaire
+        for i in range(len(pris)):
+            l, c = nextCase(l, c, horraire=False)
+            v = pris[-1-i]
+            jeu[0][l][c] = v
+            score[j-1] -= v
+            
+    jeu[4] = tuple(score)
+
+def joueCoup(jeu, coup):
+    case_fin = distribue(jeu, coup)
+    
+    mange(jeu, case_fin)
+
     game.changeJoueur(jeu)
     jeu[2] = None
-    jeu[3].append(coup)
-    
-    for i in range(len(pris)):
-        l, c = nextCase(l, c, horraire=True)
-        v = pris[-1-i]
-        jeu[0][l][c] = v
-        jeu[4][j-1] -= v
+    game.getCoupsJoues(jeu).append(coup)
