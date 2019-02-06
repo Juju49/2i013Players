@@ -10,15 +10,20 @@ def saisieCoup(jeu):
     """
     
     game.affiche(jeu)
-    print("coups valides:", game.getCoupsValides(jeu))
+    
+    print("  Vous êtes le joueur {}".format(game.getJoueur(jeu)))
+
+    coups_valides = game.getCoupsValides(jeu)
+    print(" Coups valides:", coups_valides)
+    
     coup_valide = False
     while(not coup_valide):
-        print("Saisir coup:")
-        x = input("ligne  =")
-        y = input("colonne=")
+        print("  Saisir coup:")
+        x = int(input("    ligne  ="))
+        y = int(input("    colonne="))
         coup = (x,y)
-        coup_valide = game.coupValide(jeu,coup)
+        coup_valide = coup in coups_valides
         if not coup_valide:
-            print("coup invalide! rejouez...")
+            print("    coup invalide! rejouez...")
             
     return coup

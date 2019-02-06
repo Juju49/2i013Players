@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+sys.path.append("..")
+import game  # @UnresolvedImport
+
 T = 8
 MV_DIRS = ((1,0),(0,1),(1,1),(-1,1),(-1,0),(0,-1),(-1,-1),(1,-1))
 
@@ -19,8 +23,6 @@ def nouveauPlateau():
     p[T/2][T/2-1]   = 2
     
     return p
-
-import game  # @UnresolvedImport
 
 def coupValides(jeu):
     """jeu -> list[coup]

@@ -60,7 +60,7 @@ def getCoupsValides(jeu):
         Retourne la liste des coups valides dans le jeu passe en parametre
         Si None, alors on met � jour la liste des coups valides
     """
-    if jeu[2]:
+    if jeu[2] is not None:
         return jeu[2]
 
     #on confie la tâche au jeu
@@ -121,7 +121,7 @@ def affiche(jeu):
         """
         s = ""
         for e in iterator:
-            "|".join(s, "{:^5}".format(e))
+            s = "|".join((s, "{:^5}".format(e)))
         s += "\n" + "-" * len(s)
         return s
 
@@ -129,18 +129,17 @@ def affiche(jeu):
 
     plateau = getPlateau(jeu)
     lignes = []
-    len_ligne = len(plateau[0])
     
     #infos du début
-    lignes.append( "Coup joue = {}\nScores = <score 1>, <score 2>\nPlateau :\n".format(
-            getCoupsJoues(jeu)[-1], getScores(jeu)) )
+    lignes.append( "\n\nCoup joue = {}\nScores = {}\nPlateau :\n".format(
+            getCoupsJoues(jeu)[-1] if getCoupsJoues(jeu) else None, getScores(jeu)) )
 
     #première ligne
-    lignes.append( lineBuilder([" "] + list(range(len_ligne)) ) )
+    lignes.append( lineBuilder([" "] + list(range(len(plateau[0]))) ) )
 
     #toutes les lignes du tableau
-    for i in range(len_ligne):
-        lignes.append( lineBuilder([i].extend(plateau[i])) )
+    for i in range(len(plateau)):
+        lignes.append( lineBuilder([i]+plateau[i]) )
 
     #on affiche le tout
     print("\n".join(lignes))

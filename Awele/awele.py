@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#AWELE
+import sys
+sys.path.append("..")
+import game  # @UnresolvedImport
+
 def nouveauPlateau():
     """ void -> plateau
         Retourne un nouveau plateau du jeu
@@ -9,18 +14,18 @@ def nouveauPlateau():
             [4, 4, 4, 4, 4, 4]]
 
 
-# def getparcoursJoueur(joueur):
-#     """Int->List[Tuple(Int,Int)]
-#     Retourne la liste des paires d'indices de cases dans l'ordre du début de la rangée du joueur dont c'est le tour
-#     """
-#     IDCJ1 = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5)]
-#     IDCJ2 = [(1,5), (1,4), (1,3), (1,2), (1,1), (1,0)]
-#     
-#     if joueur == 1:
-#         return IDCJ1 + IDCJ2
-#     if joueur == 2:
-#         return IDCJ2 + IDCJ1
-# 
+def getparcoursJoueur(joueur):
+    """Int->List[Tuple(Int,Int)]
+    Retourne la liste des paires d'indices de cases dans l'ordre du début de la rangée du joueur dont c'est le tour
+    """
+    IDCJ1 = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5)]
+    IDCJ2 = [(1,5), (1,4), (1,3), (1,2), (1,1), (1,0)]
+     
+    if joueur == 1:
+        return IDCJ1 + IDCJ2
+    if joueur == 2:
+        return IDCJ2 + IDCJ1
+ 
 def getGrainesJoueur(plateau, joueur):
     """plateau*Int -> Int
         Retourne le nombre de graine du coté du joueur @joueur
@@ -28,7 +33,7 @@ def getGrainesJoueur(plateau, joueur):
     parcours = getparcoursJoueur(joueur)
     nb_graines = 0
     for case in parcours[:6]:
-        nb_graines += plt[case[0]][case[1]]
+        nb_graines += plateau[case[0]][case[1]]
  
     return nb_graines
          
@@ -108,9 +113,7 @@ def finJeu(jeu):
     """ jeu -> bool
         Retourne vrai si c'est la fin du jeu
     """
-    fj = bool(len(jeu[2]))
-    
-    return fj
+    return len(game.getCoupsValides(jeu)) == 0
 
 def getGagnant(jeu):
     """jeu->nat
@@ -130,10 +133,6 @@ def getGagnant(jeu):
         return 2
     return 0
 
-#AWELE
-
-import game  # @UnresolvedImport
-
 def nourrit(jeu, coup):
     j = game.getJoueur(jeu)
     if j == 1 :
@@ -143,7 +142,7 @@ def nourrit(jeu, coup):
 def advAffame(jeu):
     j = game.getJoueur(jeu)
     adv = j % 2+ 1
-    return sum(jeu[0][adv-1] == 0)
+    return sum(jeu[0][adv-1]) == 0
 
 def coupValides(jeu):
     #règles
@@ -188,9 +187,6 @@ def distribue(jeu, case):
             jeu[0][nc[0]][nc[1]]+1
             v -= 1
     return nc
-
-def mange():
-    pass
 
 def joueCoup(jeu, coup):
     l, c = distribue(jeu, coup)

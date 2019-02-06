@@ -19,6 +19,6 @@ def mainLoop() :
 		coup = game.saisieCoup(jeu)
 		game.joueCoup(jeu, coup)
 		it+=1
-	game.afficheJeu(jeu)
+	game.affiche(jeu)
 	print("gagnant :", game.getGagnant(jeu))
 
