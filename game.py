@@ -28,10 +28,12 @@ def getCopieJeu(jeu):
         Retourne une copie du jeu passe en parametre
         Quand on copie un jeu on en calcule forcement les coups valides avant
     """
-    import copy
+    #import copy
     
-    getCoupsValides(jeu)
-    return copy.deepcopy(jeu)
+    _ = getCoupsValides(jeu)
+    #cpy_jeu = copy.deepcopy(jeu)
+    cpy_jeu = [ [[e for e in l] for l in jeu[0]], jeu[1], [cv for cv in jeu[2]], [cj for cj in jeu[3]], (jeu[4][0], jeu[4][1])]
+    return cpy_jeu
 
 def finJeu(jeu):
     """ jeu -> bool
@@ -122,18 +124,14 @@ def affiche(jeu):
         s += "\n" + "-" * len(s)
         return s
 
-
-
     plateau = getPlateau(jeu)
     lignes = []
     
     #infos du début
     lignes.append( "\n\nCoup joue = {}\nScores = {}\nPlateau :\n".format(
             getCoupsJoues(jeu)[-1] if getCoupsJoues(jeu) else None, getScores(jeu)) )
-
     #première ligne
     lignes.append( lineBuilder([" "] + list(range(len(plateau[0]))) ) )
-
     #toutes les lignes du tableau
     for i in range(len(plateau)):
         lignes.append( lineBuilder([i]+plateau[i]) )

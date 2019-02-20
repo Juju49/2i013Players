@@ -48,11 +48,12 @@ def getGagnant(jeu):
     Retourne le numero du joueur gagnant apres avoir finalise la partie. Retourne 0 si match nul
     """
     plt = jeu[0]
+    sj1, sj2 = jeu[4]
     #on capture ses graines
-    jeu[4][0] += getGrainesJoueur( plt, 1 )
-    jeu[4][1] += getGrainesJoueur( plt, 2 )
-    sj1 = jeu[4][0]
-    sj2 = jeu[4][1]
+    sj1 += getGrainesJoueur( plt, 1 )
+    sj2 += getGrainesJoueur( plt, 2 )
+    
+    jeu[4] = (sj1, sj2)
 
     #on regarde le winner 
     if sj1 > sj2:
