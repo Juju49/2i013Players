@@ -1,12 +1,15 @@
 eclipse.preferences.version=1
 encoding//Awele/Joueurs/joueur_aleatoire_u.py=utf-8
+encoding//Awele/Joueurs/joueur_alphabeta_a.py=utf-8
 encoding//Awele/Joueurs/joueur_horizon1_a.py=utf-8
+encoding//Awele/Joueurs/joueur_horizonN_a.py=utf-8
 encoding//Awele/Joueurs/joueur_humain.py=utf-8
 encoding//Awele/Joueurs/joueur_minimax_a.py=utf-8
 encoding//Awele/Joueurs/joueur_premier_coup_valide_u.py=utf-8
 encoding//Awele/awele.py=utf-8
 encoding//Awele/main.py=utf-8
 encoding//Awele/mainHEAVY.py=utf-8
+encoding//Othello/Joueurs/joueur_alphabeta_o.py=utf-8
 encoding//Othello/Joueurs/joueur_horizon1_o.py=utf-8
 encoding//Othello/Joueurs/joueur_horizonN_o.py=utf-8
 encoding//Othello/Joueurs/joueur_humain.py=utf-8

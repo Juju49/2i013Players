@@ -14,6 +14,7 @@ import joueur_dernier_coup_valide_u
 import joueur_horizon1_o
 import joueur_horizonN_o
 import joueur_minimax_o
+import joueur_alphabeta_o
 
 def partie(j1, j2):
 	game.joueur1 = joueur_aleatoire_u
@@ -39,6 +40,7 @@ def partie(j1, j2):
 def mainLoop(j1, j2, n) :
 	j1_cpt_vic = [0, 0]
 	j2_cpt_vic = [0, 0]
+	
 	try:
 		for i in range(n):
 			gagnant = 0
@@ -48,13 +50,16 @@ def mainLoop(j1, j2, n) :
 					j1_cpt_vic[0]+=1
 				if gagnant == 2:
 					j2_cpt_vic[0]+=1
+					
+				print("partie {}/{};\tgg pour j{}".format(i+1, n, gagnant))
 			else:
 				gagnant = partie(j2, j1)
 				if gagnant == 2:
 					j1_cpt_vic[1]+=1
 				if gagnant == 1:
 					j2_cpt_vic[1]+=1
-			print("partie {}/{}".format(i+1, n))
+					
+				print("partie {}/{};\tgg pour j{}".format(i+1, n, 1+gagnant%2))
 	except KeyboardInterrupt:
 		pass
 		
@@ -62,4 +67,4 @@ def mainLoop(j1, j2, n) :
 		"victoires p2 \nj1: {}%\nj2: {}%\n\n".format((j1_cpt_vic[1]/(n/2))*100, (j2_cpt_vic[1]/(n/2))*100),
 		"victoires tot\nj1: {}%\nj2: {}%\n".format((sum(j1_cpt_vic)/n)*100, (sum(j2_cpt_vic)/n)*100))
 
-mainLoop(joueur_minimax_o, joueur_horizonN_o, 50)
+mainLoop(joueur_alphabeta_o, joueur_horizonN_o, 50)
