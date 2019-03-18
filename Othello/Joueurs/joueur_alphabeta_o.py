@@ -72,7 +72,7 @@ def EDiagonales(jeu):
         case = plt[i][i]
         if case == joueur:
             ret +=2
-        elif case == joueur%2+1:
+        elif case == joueur%2+1:JEU
             ret -=1
             
         case = plt[i][7-i]
@@ -82,25 +82,27 @@ def EDiagonales(jeu):
             ret -=1
     return ret/13
 
-def EWalls(jeu):
-    pass
-#     plt = game.getPlateau(jeu)
-#     joueur = game.getJoueur(jeu)
-#     ret = 0
-#     
-#     for i in range(8):
-#         case = plt[i][i]
-#         if case == joueur:
-#             ret +=2
-#         elif case == joueur%2+1:
-#             ret -=1
-#             
-#         case = plt[i][7-i]
-#         if case == joueur:
-#             ret +=2
-#         elif case == joueur%2+1:
-#             ret -=1
-#     return ret/13
+def EWalls(jeu):    
+    plt = game.getPlateau(jeu)
+    joueur = game.getJoueur(jeu)
+    ret = 0
+    
+    for i in range(8):
+        mur_ligne = 0
+        mur_colonne = 0
+        for j in range(8):
+            case = plt[i][j]
+            if case == joueur:
+                mur_colonne -=1
+            elif case == joueur%2+1:
+                mur_colonne +=1
+                
+            case = plt[j][i]
+            if case == joueur:
+                mur_ligne -=1
+            elif case == joueur%2+1:
+                mur_ligne +=1
+    return ret
 
 #old eval
 # def evaluation(jeu):
