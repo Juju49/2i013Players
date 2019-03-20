@@ -9,6 +9,7 @@ MOI = None
 JEU = None
 
 N = 2
+WEIGHTS = [0.35, 0.10, 0.50, 0.04, 0.01]
 
 TIMEOUT = 1.0
 START_TIME = None
@@ -66,42 +67,59 @@ def EDiagonales(jeu):
     
     plt = game.getPlateau(jeu)
     joueur = game.getJoueur(jeu)
+    autre_joueur = joueur%2+1
     ret = 0
     
     for i in range(8):
         case = plt[i][i]
         if case == joueur:
             ret +=2
-        elif case == joueur%2+1:JEU
+        elif case == autre_joueur:
             ret -=1
             
         case = plt[i][7-i]
         if case == joueur:
             ret +=2
-        elif case == joueur%2+1:
+        elif case == autre_joueur:
             ret -=1
     return ret/13
 
-def EWalls(jeu):    
+def EWalls(jeu):
+    """On teste la continuité de lignes ou colonnes de pions d'un même joueur
+    """
     plt = game.getPlateau(jeu)
     joueur = game.getJoueur(jeu)
+    
     ret = 0
     
     for i in range(8):
-        mur_ligne = 0
-        mur_colonne = 0
+        mur_ligne = 1
+        mur_colonne = 1
+        last_case_ligne = None
+        last_case_colonne = None
         for j in range(8):
             case = plt[i][j]
-            if case == joueur:
-                mur_colonne -=1
-            elif case == joueur%2+1:
-                mur_colonne +=1
+            if case == last_case_ligne:
+                if case == joueur:
+                    mur_colonne /=2
+                elif case == joueur%2+1:
+                    mur_colonne +=1
+            else:
+                ret += mur_ligne - 1
+                mur_ligne = 1
+            last_case_ligne = case
                 
             case = plt[j][i]
-            if case == joueur:
-                mur_ligne -=1
-            elif case == joueur%2+1:
-                mur_ligne +=1
+            if last_case_colonne == case:
+                if case == joueur:
+                    mur_ligne -=1
+                elif case == joueur%2+1:
+                    mur_ligne +=1
+            else:
+                ret += mur_colonne - 1
+                mur_colonne = 1
+            last_case_colonne = case
+    
     return ret
 
 #old eval
@@ -111,9 +129,9 @@ def EWalls(jeu):
 #     return np.dot(w,f)
 
 def evaluation(jeu):
-    w=[0.35, 0.10, 0.50, 0.05]
-    f=[EScore, ECoins, EGagne, EDiagonales]
-    return sum([fi*wi for fi,wi in zip(f(jeu),w)])#dot
+    w=WEIGHTS
+    f=[EScore, ECoins, EGagne, EDiagonales, EWalls]
+    return sum([fi(jeu)*wi for fi,wi in zip(f,w)])#dot
 
 def estimation(jeu, coup, n=N, alpha=-float("inf"), beta=float("inf")): #negamax
     next_game = game.getCopieJeu(jeu)

@@ -9,6 +9,7 @@ MOI = None
 JEU = None
 
 N = 3
+WEIGHTS = [0.35, 0.15, 0.5]
 
 TIMEOUT = 1.0
 START_TIME = None
@@ -60,9 +61,9 @@ def EGagne(jeu):
 
 
 def evaluation(jeu):
-    w=[0.35, 0.15, 0.5]
-    f=[EScore(jeu), Egrenier(jeu), EGagne(jeu)]
-    return sum([fi*wi for fi,wi in zip(f,w)])#dot
+    w=WEIGHTS
+    f=[EScore, Egrenier, EGagne]
+    return sum([fi(jeu)*wi for fi,wi in zip(f,w)])#dot
 
 
 def estimation(jeu, coup, n=N, alpha=-float("inf"), beta=float("inf")): #negamax
