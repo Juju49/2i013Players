@@ -19,17 +19,19 @@ WEIGHTS = [3.172680009695999, 6.882857062543427, 3.536224106599102, 1.9729525704
 
 TIMEOUT = 1.0
 START_TIME = None
+T = game.game.T
 
 
 def stadeJeu(jeu):
     plt = game.getPlateau(jeu)
+    taille = T * T
 
     nb_pce = sum(sum(i) for i in plt)
     
-    if nb_pce > 64/3:
+    if nb_pce > taille/3:
         return 1 #mid game
         
-    if nb_pce > 64*3/4:
+    if nb_pce > taille*3/4:
         return 2 #late game
     
     return 0 #early game
@@ -44,8 +46,8 @@ def ECoins(jeu):
     joueur = game.getJoueur(jeu)
     ret = 0
     
-    for i in [7, 0]:
-        for j in [7, 0]:
+    for i in [T-1, 0]:
+        for j in [T-1, 0]:
             case = plt[i][j]
             if case == joueur:
                 ret +=1
@@ -66,77 +68,30 @@ def EGagne(jeu):
             return -1
     return 0
 
-def EDiagonales(jeu):
-    #seulement utile en mid et late game
-    if stadeJeu(jeu) == 0:
-        return 0
+def ELignes(jeu):
+    """détecte les lignes de 2 pions"""
     
     plt = game.getPlateau(jeu)
     joueur = game.getJoueur(jeu)
     autre_joueur = joueur%2+1
     ret = 0
     
-    for i in range(8):
-        case = plt[i][i]
-        if case == joueur:
-            ret +=2
-        elif case == autre_joueur:
-            ret -=1
+    for ln in range(T):
+        for cl in range(T):
+            if plt[ln][cl] == autre_joueur:
+                continue
             
-        case = plt[i][7-i]
-        if case == joueur:
-            ret +=2
-        elif case == autre_joueur:
-            ret -=1
-    return ret/13
-
-def EWalls(jeu):
-    """On teste la continuité de lignes ou colonnes de pions d'un même joueur
-    """
-    plt = game.getPlateau(jeu)
-    joueur = game.getJoueur(jeu)
-    
-    ret = 0
-    
-    for i in range(8):
-        mur_ligne = 1
-        mur_colonne = 1
-        last_case_ligne = None
-        last_case_colonne = None
-        for j in range(8):
-            case = plt[i][j]
-            if case == last_case_ligne:
+            for direction in game.game.MV_DIRS:
+                case = plt[ln + direction[0]][cl + direction[1]]
                 if case == joueur:
-                    mur_colonne /=2
-                elif case == joueur%2+1:
-                    mur_colonne +=1
-            else:
-                ret += mur_ligne - 1
-                mur_ligne = 1
-            last_case_ligne = case
-                
-            case = plt[j][i]
-            if last_case_colonne == case:
-                if case == joueur:
-                    mur_ligne -=1
-                elif case == joueur%2+1:
-                    mur_ligne +=1
-            else:
-                ret += mur_colonne - 1
-                mur_colonne = 1
-            last_case_colonne = case
-    
-    return ret
-
-#old eval
-# def evaluation(jeu):
-#     w=[0.7, 0.3]
-#     f=[EScore(jeu), Ecoins(jeu)]
-#     return np.dot(w,f)
+                    ret +=2
+                elif case == autre_joueur:
+                    ret -=1
+    return ret/2
 
 def evaluation(jeu):
     w=WEIGHTS
-    f=[EScore, ECoins, EGagne, EDiagonales, EWalls]
+    f=[EScore, ECoins, EGagne, ELignes]
     return sum([fi(jeu)*wi for fi,wi in zip(f,w)])#dot
 
 def estimation(jeu, coup, n=N, alpha=-float("inf"), beta=float("inf")): #negamax
